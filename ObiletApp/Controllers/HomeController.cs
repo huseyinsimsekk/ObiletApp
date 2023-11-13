@@ -57,7 +57,7 @@ namespace ObiletApp.Controllers
                 return View(model);
             }
             var firstParam = $"{model.OrigionId}-{model.DestinationId}";
-            var secondParam = model.DeparturaDate.ToShortDateString();
+            var secondParam = model.DeparturaDate.ToLocalTime().ToShortDateString();
             Response.Cookies.AddItemToCookie("Obilet-Direction", firstParam);
 
             return RedirectToAction("Journey", "Home", new { firstParam, secondParam });
@@ -67,18 +67,18 @@ namespace ObiletApp.Controllers
         public IActionResult Journey(string firstParam, string secondParam)
         {
             var split = firstParam.Split('-');
-            //if (split.Length != 2)
-            //{
-            //    return RedirectToAction("Index", "Home");
-            //}
+            if (split.Length != 2)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             var isNumber = Int32.TryParse(split[0], out int origionId);
             var isNumberSecond = Int32.TryParse(split[1], out int destinationId);
             var isValidDate = DateTime.TryParse(secondParam, out var departureDate);
 
-            //if (!isNumber || !isNumberSecond || !isValidDate)
-            //{
-            //    return RedirectToAction("Index", "Home");
-            //}
+            if (!isNumber || !isNumberSecond || !isValidDate)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             var journeyRequestModel = new JourneyRequestModel()
             {
                 DepartureDate = departureDate,
@@ -89,13 +89,11 @@ namespace ObiletApp.Controllers
 
             var model = _journeyService.GetJourneys(_httpContextAccessor.HttpContext.Session, journeyRequestModel);
 
+            _busService.GetBusLocationList(_httpContextAccessor.HttpContext.Session);
             var busList = _cache.Get<List<SelectListItem>>("busLocationList");
-            if (busList is null)
-            {
-                _busService.GetBusLocationList(_httpContextAccessor.HttpContext.Session);
-            }
-            ViewBag.Destination = busList.FirstOrDefault(m => m.Value == destinationId.ToString())?.Text;
-            ViewBag.Origin = busList.FirstOrDefault(m => m.Value == origionId.ToString())?.Text;
+          
+            ViewBag.Destination = busList?.FirstOrDefault(m => m.Value == destinationId.ToString())?.Text;
+            ViewBag.Origin = busList?.FirstOrDefault(m => m.Value == origionId.ToString())?.Text;
             ViewBag.DepartureDate = departureDate.ToShortDateString();
 
             return View(model);
