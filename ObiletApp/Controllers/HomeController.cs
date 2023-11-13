@@ -63,7 +63,7 @@ namespace ObiletApp.Controllers
             return RedirectToAction("Journey", "Home", new { firstParam, secondParam });
         }
 
-        [HttpGet("{firstParam}/{secondParam}")]
+        [HttpGet("[action]/{firstParam}/{secondParam}")]
         public IActionResult Journey(string firstParam, string secondParam)
         {
             var split = firstParam.Split('-');
