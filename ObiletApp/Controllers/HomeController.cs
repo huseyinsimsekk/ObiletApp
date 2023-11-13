@@ -92,7 +92,7 @@ namespace ObiletApp.Controllers
             var busList = _cache.Get<List<SelectListItem>>("busLocationList");
             if (busList is null)
             {
-                return RedirectToAction("Index");
+                _busService.GetBusLocationList(_httpContextAccessor.HttpContext.Session);
             }
             ViewBag.Destination = busList.FirstOrDefault(m => m.Value == destinationId.ToString())?.Text;
             ViewBag.Origin = busList.FirstOrDefault(m => m.Value == origionId.ToString())?.Text;
