@@ -4,8 +4,8 @@
 @model ObiletApp.Models.DTOs.BusLocationDto
 @{
     ViewData["Title"] = "Home Page";
-    var busLocationList = (List<SelectListItem>)ViewBag.BusLocationList;
-    var secondLocValue = busLocationList.Skip(2).FirstOrDefault().Value;
+    var busLocationList = ViewBag.BusLocationList as List<SelectListItem>;
+    var secondLocValue = busLocationList?.Skip(2)?.FirstOrDefault()?.Value;
     var isPost = (bool)ViewBag.Post;
     string obiletCookie = _accessor.HttpContext.Request.Cookies["Obilet-Direction"];
 }

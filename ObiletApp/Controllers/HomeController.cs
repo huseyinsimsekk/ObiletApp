@@ -67,18 +67,18 @@ namespace ObiletApp.Controllers
         public IActionResult Journey(string firstParam, string secondParam)
         {
             var split = firstParam.Split('-');
-            if (split.Length != 2)
-            {
-                return RedirectToAction("Index", "Home");
-            }
+            //if (split.Length != 2)
+            //{
+            //    return RedirectToAction("Index", "Home");
+            //}
             var isNumber = Int32.TryParse(split[0], out int origionId);
             var isNumberSecond = Int32.TryParse(split[1], out int destinationId);
             var isValidDate = DateTime.TryParse(secondParam, out var departureDate);
 
-            if (!isNumber || !isNumberSecond || !isValidDate)
-            {
-                return RedirectToAction("Index", "Home");
-            }
+            //if (!isNumber || !isNumberSecond || !isValidDate)
+            //{
+            //    return RedirectToAction("Index", "Home");
+            //}
             var journeyRequestModel = new JourneyRequestModel()
             {
                 DepartureDate = departureDate,
