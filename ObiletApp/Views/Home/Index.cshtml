@@ -1,0 +1,53 @@
+﻿@using Microsoft.AspNetCore.Http
+@using ObiletApp.Models.ResponseModels;
+@inject IHttpContextAccessor _accessor;
+@model ObiletApp.Models.DTOs.BusLocationDto
+@{
+    ViewData["Title"] = "Home Page";
+    var busLocationList = (List<SelectListItem>)ViewBag.BusLocationList;
+    var secondLocValue = busLocationList.Skip(2).FirstOrDefault().Value;
+    var isPost = (bool)ViewBag.Post;
+    string obiletCookie = _accessor.HttpContext.Request.Cookies["Obilet-Direction"];
+}
+<header class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3" style="height:50px;">
+</header>
+<div class="container">
+    <div class="text-start">
+        <form asp-controller="Home" asp-action="Index" method="post">
+            <div class="col-lg-3 col-md-4">
+                <div class="form-group">
+                    <label for="OrigionId">Nereden</label>
+                    @Html.DropDownListFor(m=>m.OrigionId, new SelectList(busLocationList, "Value", "Text"),new {@class="form-control"})
+                    <span asp-validation-for="DestinationId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-4 text-end">
+                <button type="button" id="changeRoute" class="btn"><i class="fa-solid fa-arrows-up-down"></i></button>
+            </div>
+            <div class="col-lg-3 col-md-4">
+                <div class="form-group">
+                    <label for="DestinationId">Nereye</label>
+                    @Html.DropDownListFor(m=>m.DestinationId, new SelectList(busLocationList, "Value", "Text" ),new {@class="form-control"})
+                    <input id="secondLocation" type="hidden" value="@secondLocValue" />
+                    <input id="isPost" type="hidden" value="@isPost" />
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-4 my-3">
+                <div class="form-group">
+                    <label>Tarih</label>
+                    <input asp-for="DeparturaDate" type="date" class="form-control js-datepicker" />
+                    <span asp-validation-for="DeparturaDate" class="text-danger"></span>
+                    <div class="text-end mt-2">
+                        <button type="button" id="todayButton" class="btn btn-sm btn-outline-secondary">Bugün</button>
+                        <button type="button" id="tomorrowButton" class="btn btn-sm btn-secondary">Yarın</button>
+                    </div>
+
+                </div>
+            </div>
+            <button type="submit" class="col-lg-3 col-md-4 btn btn-lg" style="background-color:#2F4EB4;color:white; ">Bilet Bul</button>
+            <input id="obiletCookie" type="hidden" value="@obiletCookie" />
+        </form>
+    </div>
+</div>
+
+
