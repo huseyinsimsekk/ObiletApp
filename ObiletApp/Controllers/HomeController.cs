@@ -57,7 +57,7 @@ namespace ObiletApp.Controllers
                 return View(model);
             }
             var firstParam = $"{model.OrigionId}-{model.DestinationId}";
-            var secondParam = model.DeparturaDate.ToLocalTime().ToShortDateString();
+            var secondParam = model.DeparturaDate.ToShortDateString();
             Response.Cookies.AddItemToCookie("Obilet-Direction", firstParam);
 
             return RedirectToAction("Journey", "Home", new { firstParam, secondParam });
