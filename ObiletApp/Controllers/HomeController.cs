@@ -60,16 +60,16 @@ namespace ObiletApp.Controllers
             var secondParam = model.DeparturaDate.ToShortDateString();
             Response.Cookies.AddItemToCookie("Obilet-Direction", firstParam);
 
-            return RedirectToAction("Journey", "Home", new { firstParam, secondParam });
+            return Redirect($"Journey/{firstParam}/{secondParam}");
         }
 
-        [HttpGet("[controller]/[action]/{firstParam}/{secondParam}")]
+        [HttpGet("[action]/{firstParam}/{secondParam}")]
         public IActionResult Journey(string firstParam, string secondParam)
         {
             var split = firstParam.Split('-');
             if (split.Length != 2)
             {
-                return RedirectToAction("Index", "Home");
+                return Redirect("/");
             }
             var isNumber = Int32.TryParse(split[0], out int origionId);
             var isNumberSecond = Int32.TryParse(split[1], out int destinationId);
@@ -77,7 +77,7 @@ namespace ObiletApp.Controllers
 
             if (!isNumber || !isNumberSecond || !isValidDate)
             {
-                return RedirectToAction("Index", "Home");
+                return Redirect("/");
             }
             var journeyRequestModel = new JourneyRequestModel()
             {
