@@ -26,6 +26,7 @@ namespace ObiletApp.Controllers
                     throw new Exception("Session is not created");
                 }
                 context.HttpContext.Session.SetObjectAsJson("my_session", data);
+                
             }
             base.OnActionExecuting(context);
         }
